@@ -28,3 +28,11 @@ main#frontpage {
   margin-top: 7rem;
   margin-left: 1rem;
 }
+
+main#frontpage a {
+  color: #424242;
+}
+
+main#frontpage a:hover {
+  color: #696969;
+}
