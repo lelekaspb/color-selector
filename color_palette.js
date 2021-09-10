@@ -6,6 +6,7 @@ window.addEventListener("DOMContentLoaded", start);
 function start() {
   document.querySelector("#color").addEventListener("input", changeColor);
   document.querySelector("#harmony").addEventListener("change", changeHarmony);
+  setRandomColor();
 }
 
 // create object for storing chosen color and harmony
@@ -20,15 +21,41 @@ const Color = {
   hsl: "",
 };
 
+// generate random color and change the palette object
+function setRandomColor() {
+  const color = randomColor();
+  const cssColor = getHexString(color);
+  palette.color = cssColor;
+  document.querySelector("#color").value = palette.color;
+  // initialize calculations and changes on page load
+  init();
+}
+
+// assemble object of random colors
+function randomColor() {
+  return {
+    r: randomNumber(),
+    g: randomNumber(),
+    b: randomNumber(),
+  };
+}
+
+// generate random color
+function randomNumber() {
+  return Math.floor(Math.random() * 255);
+}
+
 // update the palette object with newly chosen color
 function changeColor(e) {
   palette.color = e.target.value;
+  // initialize calculations and changes on user's choice
   init();
 }
 
 // update the palette object with newly chosen harmony
 function changeHarmony(e) {
   palette.harmony = e.target.value;
+  // initialize calculations and changes on user's choice
   init();
 }
 
@@ -165,10 +192,10 @@ function createBaseColorObject(hsl) {
 
 // get array of monochromatic colors
 function calculateMonochromaticColors(hsl) {
-  const color1 = calculateMonochromaticColor(hsl, 15);
-  const color2 = calculateMonochromaticColor(hsl, 30);
-  const color3 = calculateMonochromaticColor(hsl, 45);
-  const color4 = calculateMonochromaticColor(hsl, 60);
+  const color1 = calculateMonochromaticColor(hsl, 10);
+  const color2 = calculateMonochromaticColor(hsl, 20);
+  const color3 = calculateMonochromaticColor(hsl, 30);
+  const color4 = calculateMonochromaticColor(hsl, 40);
   const color5 = createBaseColorObject(hsl);
   return [color1, color2, color3, color4, color5];
 }
@@ -177,8 +204,8 @@ function calculateMonochromaticColors(hsl) {
 function calculateMonochromaticColor(hsl, num) {
   const color = Object.create(Color);
   let saturation = parseInt(hsl.s) + num;
-  if (saturation >= 100) {
-    saturation -= 100;
+  if (parseInt(hsl.s) + num >= 100) {
+    saturation = parseInt(hsl.s) - num;
   }
   color.hsl = `${hsl.h},${saturation},${hsl.l}`;
   return color;
